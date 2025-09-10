@@ -1,0 +1,31 @@
+name: RustDesk
+
+services:
+  hbbs:
+    container_name: hbbs
+    image: rustdesk/rustdesk-server:${RUSTDESK_VERSION}
+    command: hbbs
+    volumes:
+      - rustdesk_data:/root
+      - /etc/timezone:/etc/timezone:ro
+    network_mode: "host"
+    depends_on:
+      - hbbr
+    restart: unless-stopped
+    labels:
+      - wud.tag.include=^\d+\.\d+\.\d+$$
+
+  hbbr:
+    container_name: hbbr
+    image: rustdesk/rustdesk-server:${RUSTDESK_VERSION}
+    command: hbbr
+    volumes:
+      - rustdesk_data:/root
+      - /etc/timezone:/etc/timezone:ro
+    network_mode: "host"
+    restart: unless-stopped
+    labels:
+      - wud.tag.include=^\d+\.\d+\.\d+$$
+
+volumes:
+  rustdesk_data:
